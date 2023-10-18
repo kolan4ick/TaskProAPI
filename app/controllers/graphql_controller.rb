@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "task_pro_api_schema.rb"
 
 class GraphqlController < ApplicationController
   # If accessing from outside this domain, nullify the session
@@ -7,18 +8,24 @@ class GraphqlController < ApplicationController
   # protect_from_forgery with: :null_session
 
   def execute
+    Rails.logger.info TaskProAPISchema.to_definition
+
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
       # current_user: current_user,
+      session: session,
     }
+
     result = TaskProAPISchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+
     render json: result
+
   rescue StandardError => e
     raise e unless Rails.env.development?
-    handle_error_in_development(e)
+    handle_error_in_development e
   end
 
   private
