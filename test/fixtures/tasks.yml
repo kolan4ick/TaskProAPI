@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyString
+  deadline: 2023-10-19 01:38:57
+  user: one
+  assignee: one
+  priority_level: 1
+  status: 1
+  completed_at: 2023-10-19 01:38:57
+
+two:
+  title: MyString
+  description: MyString
+  deadline: 2023-10-19 01:38:57
+  user: two
+  assignee: two
+  priority_level: 1
+  status: 1
+  completed_at: 2023-10-19 01:38:57
