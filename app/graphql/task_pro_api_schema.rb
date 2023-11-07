@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TaskProAPISchema < GraphQL::Schema
+class TaskProApiSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
 

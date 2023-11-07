@@ -8,7 +8,7 @@ class GraphqlController < ApplicationController
   # protect_from_forgery with: :null_session
 
   def execute
-    Rails.logger.info TaskProAPISchema.to_definition
+    Rails.logger.info TaskProApiSchema.to_definition
 
     variables = prepare_variables(params[:variables])
     query = params[:query]
@@ -19,7 +19,7 @@ class GraphqlController < ApplicationController
       session: session,
     }
 
-    result = TaskProAPISchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    result = TaskProApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 
     render json: result
 
