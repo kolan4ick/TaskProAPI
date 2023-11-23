@@ -13,4 +13,19 @@ class User < ApplicationRecord
   has_many :teams, through: :team_memberships
 
   has_many :owned_teams, class_name: 'Team', foreign_key: 'owner_id'
+
+  def generate_jwt
+    secret_key = if Rails.env.development?
+                   Rails.application.credentials.development[:secret_key_base]
+                 elsif Rails.env.test?
+                   Rails.application.credentials.test[:secret_key_base]
+                 else
+                   Rails.application.credentials.production[:secret_key_base]
+                 end
+
+    JWT.encode({
+                 id:,
+                 exp: 60.days.from_now.to_i
+               }, secret_key)
+  end
 end
