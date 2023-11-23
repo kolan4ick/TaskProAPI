@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_18_230317) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_23_223019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "boards", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.string "title"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_boards_on_project_id"
+  end
 
   create_table "comments", force: :cascade do |t|
     t.text "content"
@@ -22,6 +31,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_230317) do
     t.datetime "updated_at", null: false
     t.index ["task_id"], name: "index_comments_on_task_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "lists", force: :cascade do |t|
+    t.bigint "board_id", null: false
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["board_id"], name: "index_lists_on_board_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -51,9 +68,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_230317) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "project_id", null: false
+    t.bigint "list_id", null: false
     t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
-    t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.index ["list_id"], name: "index_tasks_on_list_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -90,10 +107,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_230317) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "boards", "projects"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
+  add_foreign_key "lists", "boards"
   add_foreign_key "notifications", "users"
-  add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "lists"
   add_foreign_key "tasks", "users"
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "team_memberships", "teams"
