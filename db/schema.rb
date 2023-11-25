@@ -33,14 +33,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_223019) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "lists", force: :cascade do |t|
-    t.bigint "board_id", null: false
-    t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["board_id"], name: "index_lists_on_board_id"
-  end
-
   create_table "notifications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.text "content"
@@ -57,6 +49,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_223019) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "rosters", force: :cascade do |t|
+    t.bigint "board_id", null: false
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["board_id"], name: "index_rosters_on_board_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -68,9 +68,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_223019) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "list_id", null: false
+    t.bigint "roster_id", null: false
     t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
-    t.index ["list_id"], name: "index_tasks_on_list_id"
+    t.index ["roster_id"], name: "index_tasks_on_roster_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -110,9 +110,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_223019) do
   add_foreign_key "boards", "projects"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
-  add_foreign_key "lists", "boards"
   add_foreign_key "notifications", "users"
-  add_foreign_key "tasks", "lists"
+  add_foreign_key "rosters", "boards"
+  add_foreign_key "tasks", "rosters"
   add_foreign_key "tasks", "users"
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "team_memberships", "teams"
