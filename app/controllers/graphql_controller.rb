@@ -14,8 +14,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: current_user,
       session: session,
     }
 
@@ -29,6 +28,20 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def current_user
+    return unless request.headers['Authorization'].present?
+
+    begin
+      token = request.headers['Authorization'].split(' ')[1]
+      decoded_token = JWT.decode(token, Rails.application.credentials.dig(Rails.env.to_sym, :secret_key_base), true, { algorithm: 'HS256' })
+
+      User.find(decoded_token[0]['id'])
+
+    rescue JWT::DecodeError
+      nil
+    end
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
