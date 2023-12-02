@@ -5,14 +5,17 @@ module Mutations
     class CreateBoard < BaseMutation
       field :board, Types::BoardType, null: false
 
-      argument :title, String, required: true
-      argument :description, String, required: true
-      argument :cover_image, ApolloUploadServer::Upload, required: false
+      argument :project_id, Integer, required: false
+      argument :title, String, required: false
+      argument :description, String, required: false
+      argument :cover_photo, ApolloUploadServer::Upload, required: false
 
       def resolve(**board_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
-        board = Board.new(board_input.except(:cover_image))
+        project = Project.find_by(id: board_input[:project_id])
+
+        board = project.boards.build(board_input.except(:cover_image))
 
         cover_image = board_input[:cover_image]
 

@@ -7,7 +7,6 @@ module Types
     argument :title, String, required: false
     argument :description, String, required: false
     argument :rosters_arguments, [Types::RosterInputType], required: false
-    argument :created_at, GraphQL::Types::ISO8601DateTime, required: false
-    argument :updated_at, GraphQL::Types::ISO8601DateTime, required: false
+    argument :cover_photo, ApolloUploadServer::Upload, required: false
   end
 end

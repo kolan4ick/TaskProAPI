@@ -1,16 +1,22 @@
 # frozen_string_literal: true
 
 module Mutations
-  class Rosters::CreateRoster < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+  module Rosters
+    class CreateRoster < BaseMutation
+      field :roster, Types::RosterType, null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+      argument :board_id, Integer, required: false
+      argument :title, String, required: false
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+      def resolve(**roster_input)
+        raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+        roster = Roster.new(roster_input)
+
+        raise GraphQL::ExecutionError, roster.errors.full_messages.join(', ') unless roster.save
+
+        { roster: roster }
+      end
+    end
   end
 end
