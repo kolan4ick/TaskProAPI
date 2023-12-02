@@ -28,24 +28,14 @@ module Types
       Project.limit(limit)
     end
 
-    field :boards, [Types::BoardType], null: false, description: "Returns a list of boards" do
-      argument :limit, Integer, required: false, default_value: 10, description: "Number of boards to return"
+    field :project, Types::ProjectType, null: false, description: "Returns a project" do
+      argument :id, ID, required: true, description: "ID of the project"
     end
 
-    def boards(limit:)
+    def project(id:)
       raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
-      Board.limit(limit)
-    end
-
-    field :rosters, [Types::RosterType], null: false, description: "Returns a list of rosters" do
-      argument :limit, Integer, required: false, default_value: 10, description: "Number of rosters to return"
-    end
-
-    def rosters(limit:)
-      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
-
-      Roster.limit(limit)
+      Project.find(id)
     end
   end
 end
