@@ -15,7 +15,7 @@ module Mutations
 
         raise GraphQL::ExecutionError, roster.errors.full_messages.join(', ') unless roster.save
 
-        { roster: roster }
+        { roster: }
       end
     end
   end
