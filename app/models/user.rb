@@ -9,11 +9,6 @@ class User < ApplicationRecord
 
   has_many :notifications
 
-  has_many :team_memberships, dependent: :destroy
-  has_many :teams, through: :team_memberships
-
-  has_many :owned_teams, class_name: 'Team', foreign_key: 'owner_id'
-
   def generate_jwt
     secret_key = if Rails.env.development?
                    Rails.application.credentials.development[:secret_key_base]

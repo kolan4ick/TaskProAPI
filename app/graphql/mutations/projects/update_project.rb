@@ -1,16 +1,26 @@
 # frozen_string_literal: true
 
 module Mutations
-  class Projects::UpdateProject < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+  module Projects
+    class UpdateProject < BaseMutation
+      field :project, Types::ProjectType, null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+      argument :id, ID, required: true
+      argument :title, String, required: false
+      argument :description, String, required: false
+      argument :icon, ApolloUploadServer::Upload, required: false
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+      def resolve(id:, **project_input)
+        raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+        project = Project.find(id)
+
+        raise GraphQL::ExecutionError, 'Project not found' unless project.present?
+
+        project.update(project_input.except(:icon))
+
+        { project: }
+      end
+    end
   end
 end

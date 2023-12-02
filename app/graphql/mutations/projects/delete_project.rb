@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 
 module Mutations
-  class Projects::DeleteProject < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+  module Projects
+    class DeleteProject < BaseMutation
+      field :project, Types::ProjectType, null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+      argument :id, ID, required: true
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+      def resolve(id:)
+        raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+        project = Project.find(id)
+
+        raise GraphQL::ExecutionError, 'Project not found' unless project.present?
+
+        project.destroy
+
+        { project: }
+      end
+    end
   end
 end

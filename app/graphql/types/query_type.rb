@@ -15,17 +15,17 @@ module Types
     end
 
     def nodes(ids:)
-      ids.map { |id| context.schema.object_from_id(id, context) }
+      ids.map { | id | context.schema.object_from_id(id, context) }
     end
 
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
+    field :projects, [Types::ProjectType], null: false, description: "Returns a list of projects" do
+      argument :limit, Integer, required: false, default_value: 10, description: "Number of projects to return"
+    end
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
+    def projects(limit:)
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      Project.limit(limit)
     end
   end
 end
