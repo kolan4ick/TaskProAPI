@@ -17,6 +17,8 @@ module Mutations
 
         raise GraphQL::ExecutionError, comment.errors.full_messages.join(', ') unless comment.save
 
+        # TODO: Create a notification for the task owner and assignee
+
         { comment: }
       end
     end
