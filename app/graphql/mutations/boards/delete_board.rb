@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 
 module Mutations
-  class Boards::DeleteBoard < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+  module Boards
+    class DeleteBoard < BaseMutation
+      field :board, Types::BoardType, null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+      argument :id, ID, required: true
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+      def resolve(id:)
+        raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+        board = Board.find(id)
+
+        raise GraphQL::ExecutionError, 'Board not found' unless board.present?
+
+        board.destroy
+
+        { board: }
+      end
+    end
   end
 end

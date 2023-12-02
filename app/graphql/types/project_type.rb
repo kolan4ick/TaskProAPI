@@ -11,11 +11,9 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     def icon
-      if object.icon.attached?
-        Rails.application.routes.url_helpers.rails_blob_url(object.icon, host: ENV['HOST'])
-      else
-        nil
-      end
+      return unless object.icon.attached?
+
+      Rails.application.routes.url_helpers.rails_blob_url(object.icon, host: ENV['HOST'])
     end
   end
 end
