@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   has_many :notifications
 
+  has_many :comments
+
   def generate_jwt
     secret_key = if Rails.env.development?
                    Rails.application.credentials.development[:secret_key_base]

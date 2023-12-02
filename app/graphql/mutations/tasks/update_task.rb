@@ -9,7 +9,6 @@ module Mutations
       argument :title, String, required: false
       argument :description, String, required: false
       argument :deadline, GraphQL::Types::ISO8601DateTime, required: false
-      argument :user_id, Integer, required: true
       argument :assignee_id, Integer, required: false
       argument :priority_level, Types::TaskPriorityLevelType, required: false
       argument :roster_id, Integer, required: true
