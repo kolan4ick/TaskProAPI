@@ -9,7 +9,6 @@ module Mutations
       field :token, String, null: true
 
       def resolve(token:)
-
         decoded_token = JWT.decode(token, Rails.application.credentials.dig(Rails.env.to_sym, :secret_key_base), true, { algorithm: 'HS256' })
 
         user = User.find(decoded_token[0]['id'])
@@ -21,7 +20,6 @@ module Mutations
         { user:, token: }
       rescue StandardError => e
         raise GraphQL::ExecutionError, "An error occurred: #{e.message}"
-
       end
     end
   end
