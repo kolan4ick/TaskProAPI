@@ -17,7 +17,17 @@ module Mutations
 
         raise GraphQL::ExecutionError, 'Project not found' unless project.present?
 
-        project.update(project_input.except(:icon))
+        if project_input[:icon].present?
+          icon_file = {
+            io: StringIO.new(project_input[:icon].read),
+            filename: project_input[:icon].original_filename,
+            content_type: project_input[:icon].content_type
+          }
+
+          project_input[:icon] = icon_file
+        end
+
+        project.update(project_input)
 
         { project: }
       end
