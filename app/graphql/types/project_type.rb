@@ -13,7 +13,12 @@ module Types
     def icon
       return unless object.icon.attached?
 
-      Rails.application.routes.url_helpers.rails_blob_url(object.icon, host: ENV['HOST'])
+      if object.icon.content_type == 'image/svg+xml'
+        encoded_svg = Base64.strict_encode64(object.icon.download)
+        "data:image/svg+xml;base64,#{encoded_svg}"
+      else
+        Rails.application.routes.url_helpers.rails_blob_url(object.icon, host: ENV['HOST'])
+      end
     end
   end
 end
