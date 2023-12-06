@@ -13,6 +13,7 @@ module Mutations
       argument :priority_level, Types::TaskPriorityLevelType, required: false
       argument :roster_id, Integer, required: true
       argument :status, Types::TaskStatusType, required: false
+      argument :position, Integer, required: false
 
       def resolve(task_input:)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
@@ -22,6 +23,15 @@ module Mutations
         raise GraphQL::ExecutionError, 'Task not found' unless task
 
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].id == task.user_id
+
+        # Change position for all tasks if it was changed
+        if task.position != task_input[:position] && task_input[:position].present?
+          if task.position > task_input[:position]
+            Task.where("position >= ? AND position < ?", task_input[:position], task.position).update_all("position = position + 1")
+          else
+            Task.where("position <= ? AND position > ?", task_input[:position], task.position).update_all("position = position - 1")
+          end
+        end
 
         raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.update(task_input.to_h)
 

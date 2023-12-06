@@ -8,6 +8,7 @@ module Types
     field :description, String
     field :rosters, [Types::RosterType], null: true
     field :cover_photo, String, null: true
+    field :position, Integer, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
@@ -15,6 +16,10 @@ module Types
       return unless object.cover_photo.attached?
 
       Rails.application.routes.url_helpers.rails_blob_url(object.cover_photo, host: ENV['HOST'])
+    end
+
+    def rosters
+      object.rosters.order(position: :asc)
     end
   end
 end

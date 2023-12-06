@@ -6,7 +6,6 @@ module Types
     argument :board_id, Integer, required: false
     argument :title, String, required: false
     argument :tasks_arguments, [Types::TaskInputType], required: false
-    argument :created_at, GraphQL::Types::ISO8601DateTime, required: false
-    argument :updated_at, GraphQL::Types::ISO8601DateTime, required: false
+    argument :position, Integer, required: false
   end
 end

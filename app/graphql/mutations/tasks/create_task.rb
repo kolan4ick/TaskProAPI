@@ -12,6 +12,7 @@ module Mutations
       argument :priority_level, Types::TaskPriorityLevelType, required: false
       argument :roster_id, Integer, required: true
       argument :status, Types::TaskStatusType, required: false
+      argument :position, Integer, required: false
 
       def resolve(**task_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
@@ -19,6 +20,9 @@ module Mutations
         user = context[:current_user]
 
         task = user.tasks.build(task_input)
+
+        # Set display_order to the last one
+        task.position = Task.maximum(:position).to_i + 1
 
         raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.save
 

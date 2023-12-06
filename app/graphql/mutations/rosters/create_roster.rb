@@ -13,6 +13,9 @@ module Mutations
 
         roster = Roster.new(roster_input)
 
+        # Set display_order to the last one
+        roster.position = Roster.maximum(:position).to_i + 1
+
         raise GraphQL::ExecutionError, roster.errors.full_messages.join(', ') unless roster.save
 
         { roster: }

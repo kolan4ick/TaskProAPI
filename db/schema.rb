@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_03_213126) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_06_232834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_213126) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position", default: 1
     t.index ["project_id"], name: "index_boards_on_project_id"
   end
 
@@ -82,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_213126) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position", default: 1
     t.index ["board_id"], name: "index_rosters_on_board_id"
   end
 
@@ -97,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_213126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "roster_id", null: false
+    t.integer "position", default: 1
     t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
     t.index ["roster_id"], name: "index_tasks_on_roster_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"

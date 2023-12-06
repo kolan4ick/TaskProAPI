@@ -8,5 +8,6 @@ module Types
     argument :description, String, required: false
     argument :rosters_arguments, [Types::RosterInputType], required: false
     argument :cover_photo, ApolloUploadServer::Upload, required: false
+    argument :position, Integer, required: false
   end
 end
