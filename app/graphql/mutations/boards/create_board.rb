@@ -15,19 +15,19 @@ module Mutations
 
         project = Project.find_by(id: board_input[:project_id])
 
-        board = project.boards.build(board_input.except(:cover_image))
+        cover_photo = board_input[:cover_photo]
 
-        cover_image = board_input[:cover_image]
-
-        if cover_image.present?
-          cover_image_file = {
-            io: StringIO.new(cover_image.read),
-            filename: cover_image.original_filename,
-            content_type: cover_image.content_type
+        if cover_photo.present?
+          cover_photo_file = {
+            io: StringIO.new(cover_photo.read),
+            filename: cover_photo.original_filename,
+            content_type: cover_photo.content_type
           }
 
-          board_input[:cover_image] = cover_image_file
+          board_input[:cover_photo] = cover_photo_file
         end
+
+        board = project.boards.build(board_input)
 
         raise GraphQL::ExecutionError, board.errors.full_messages.join(', ') unless board.save
 
