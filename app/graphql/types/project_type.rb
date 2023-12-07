@@ -20,5 +20,9 @@ module Types
         Rails.application.routes.url_helpers.rails_blob_url(object.icon, host: ENV['HOST'])
       end
     end
+
+    def boards
+      object.boards.order(position: :asc)
+    end
   end
 end

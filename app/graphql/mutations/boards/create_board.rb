@@ -29,6 +29,9 @@ module Mutations
 
         board = project.boards.build(board_input)
 
+        # Set display_order to the last one
+        board.position = Board.maximum(:position).to_i + 1
+
         raise GraphQL::ExecutionError, board.errors.full_messages.join(', ') unless board.save
 
         { board: }

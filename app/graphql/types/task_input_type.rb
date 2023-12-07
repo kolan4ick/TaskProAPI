@@ -11,8 +11,7 @@ module Types
     argument :priority_level, Integer, required: false
     argument :status, Integer, required: false
     argument :completed_at, GraphQL::Types::ISO8601DateTime, required: false
-    argument :created_at, GraphQL::Types::ISO8601DateTime, required: false
-    argument :updated_at, GraphQL::Types::ISO8601DateTime, required: false
+    argument :position, Integer, required: false
     argument :roster_id, Integer, required: false
   end
 end

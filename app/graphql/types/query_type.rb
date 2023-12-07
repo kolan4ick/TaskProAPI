@@ -37,5 +37,15 @@ module Types
 
       Project.find(id)
     end
+
+    field :board, Types::BoardType, null: false, description: "Returns a board" do
+      argument :id, ID, required: true, description: "ID of the board"
+    end
+
+    def board(id:)
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      Board.find(id)
+    end
   end
 end
