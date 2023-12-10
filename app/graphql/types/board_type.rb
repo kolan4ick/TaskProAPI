@@ -15,7 +15,7 @@ module Types
     def cover_photo
       return unless object.cover_photo.attached?
 
-      Rails.application.routes.url_helpers.rails_blob_url(object.cover_photo, host: ENV['HOST'])
+      Rails.application.routes.url_helpers.rails_blob_url(object.cover_photo.variant(resize_to_limit: [1000, 1000]), host: ENV['HOST'])
     end
 
     def rosters
