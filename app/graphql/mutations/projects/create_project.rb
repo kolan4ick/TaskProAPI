@@ -12,8 +12,6 @@ module Mutations
       def resolve(**project_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
-        project = Project.new(project_input.except(:icon))
-
         icon = project_input[:icon]
 
         if icon.present?
@@ -25,6 +23,8 @@ module Mutations
 
           project_input[:icon] = icon_file
         end
+
+        project = Project.new(project_input)
 
         raise GraphQL::ExecutionError, project.errors.full_messages.join(', ') unless project.save
 
