@@ -19,7 +19,10 @@ module Mutations
 
         user = context[:current_user]
 
-        if user.update(email: email, password: password, password_confirmation: password_confirmation, first_name: first_name, last_name: last_name, phone: phone)
+        if user.update(email: email, first_name: first_name, last_name: last_name, phone: phone)
+
+          user.update(password: password, password_confirmation: password_confirmation) if password.present? && password_confirmation.present?
+
           {
             user: user,
             errors: []
