@@ -27,7 +27,7 @@ module Types
     field :create_project, mutation: Mutations::Projects::CreateProject
 
     # Users
-    field :users_update, mutation: Mutations::Users::UpdateUser
+    field :update_user, mutation: Mutations::Users::UpdateUser
     field :sign_up, mutation: Mutations::Users::SignUpUser
     field :sign_in, mutation: Mutations::Users::SignInUser
     field :check_user_token, mutation: Mutations::Users::CheckTokenUser
