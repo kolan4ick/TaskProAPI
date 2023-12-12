@@ -15,11 +15,11 @@ module Mutations
       argument :status, Types::TaskStatusType, required: false
       argument :position, Integer, required: false
 
-      def resolve(task_input:)
+      def resolve(**task_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
         task = Task.find(task_input[:id])
-        board = Board.find(task_input[:board_id])
+        roster = Roster.find(task_input[:roster_id])
 
         raise GraphQL::ExecutionError, 'Task not found' unless task
 
@@ -28,9 +28,9 @@ module Mutations
         # Change position for all tasks if it was changed
         if task.position != task_input[:position] && task_input[:position].present?
           if task.position > task_input[:position]
-            board.tasks.where("position >= ? AND position < ?", task_input[:position], task.position).update_all("position = position + 1")
+            roster.tasks.where("position >= ? AND position < ?", task_input[:position], task.position).update_all("position = position + 1")
           else
-            board.tasks.where("position <= ? AND position > ?", task_input[:position], task.position).update_all("position = position - 1")
+            roster.tasks.where("position <= ? AND position > ?", task_input[:position], task.position).update_all("position = position - 1")
           end
         end
 
