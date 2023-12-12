@@ -19,6 +19,7 @@ module Mutations
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
         task = Task.find(task_input[:id])
+        board = Board.find(task_input[:board_id])
 
         raise GraphQL::ExecutionError, 'Task not found' unless task
 
@@ -27,9 +28,9 @@ module Mutations
         # Change position for all tasks if it was changed
         if task.position != task_input[:position] && task_input[:position].present?
           if task.position > task_input[:position]
-            Task.where("position >= ? AND position < ?", task_input[:position], task.position).update_all("position = position + 1")
+            board.tasks.where("position >= ? AND position < ?", task_input[:position], task.position).update_all("position = position + 1")
           else
-            Task.where("position <= ? AND position > ?", task_input[:position], task.position).update_all("position = position - 1")
+            board.tasks.where("position <= ? AND position > ?", task_input[:position], task.position).update_all("position = position - 1")
           end
         end
 

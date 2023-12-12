@@ -15,6 +15,7 @@ module Mutations
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
         board = Board.find(board_input[:id])
+        project = board.project
 
         cover_image = board_input[:cover_image]
 
@@ -31,9 +32,9 @@ module Mutations
         # Change position for all boards if it was changed
         if board.position != board_input[:position] && board_input[:position].present?
           if board.position > board_input[:position]
-            Board.where("position >= ? AND position < ?", board_input[:position], board.position).update_all("position = position + 1")
+            project.boards.where("position >= ? AND position < ?", board_input[:position], board.position).update_all("position = position + 1")
           else
-            Board.where("position <= ? AND position > ?", board_input[:position], board.position).update_all("position = position - 1")
+            project.boards.where("position <= ? AND position > ?", board_input[:position], board.position).update_all("position = position - 1")
           end
         end
 

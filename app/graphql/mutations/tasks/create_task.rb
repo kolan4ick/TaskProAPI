@@ -20,9 +20,10 @@ module Mutations
         user = context[:current_user]
 
         task = user.tasks.build(task_input)
+        roster = Roster.find(task_input[:roster_id])
 
         # Set display_order to the last one
-        task.position = Task.maximum(:position).to_i + 1
+        task.position = roster.tasks.maximum(:position).to_i + 1
 
         raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.save
 

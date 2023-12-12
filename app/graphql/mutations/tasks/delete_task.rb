@@ -11,12 +11,15 @@ module Mutations
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
         task = Task.find_by(id:)
+        board = task.board
 
         raise GraphQL::ExecutionError, 'Task not found' unless task.present?
 
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].id == task.user_id
 
-        task.destroy
+        if task.destroy
+          board.tasks.where("position > ?", task.position).update_all("position = position - 1")
+        end
 
         { task: }
       end

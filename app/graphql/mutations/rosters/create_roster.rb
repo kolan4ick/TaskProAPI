@@ -11,10 +11,11 @@ module Mutations
       def resolve(**roster_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
+        board = Board.find(roster_input[:board_id])
         roster = Roster.new(roster_input)
 
         # Set display_order to the last one
-        roster.position = Roster.maximum(:position).to_i + 1
+        roster.position = board.rosters.maximum(:position).to_i + 1
 
         raise GraphQL::ExecutionError, roster.errors.full_messages.join(', ') unless roster.save
 

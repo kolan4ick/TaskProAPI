@@ -13,6 +13,7 @@ module Mutations
       def resolve(id:, **roster_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
+        board = Board.find(roster_input[:board_id])
         roster = Roster.find(id)
 
         raise GraphQL::ExecutionError, 'Roster not found' unless roster.present?
@@ -20,9 +21,9 @@ module Mutations
         # Change position for all rosters if it was changed
         if roster.position != roster_input[:position] && roster_input[:position].present?
           if roster.position > roster_input[:position]
-            Roster.where("position >= ? AND position < ?", roster_input[:position], roster.position).update_all("position = position + 1")
+            board.rosters.where("position >= ? AND position < ?", roster_input[:position], roster.position).update_all("position = position + 1")
           else
-            Roster.where("position <= ? AND position > ?", roster_input[:position], roster.position).update_all("position = position - 1")
+            board.rosters.where("position <= ? AND position > ?", roster_input[:position], roster.position).update_all("position = position - 1")
           end
         end
 

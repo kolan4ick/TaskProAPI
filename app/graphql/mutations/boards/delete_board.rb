@@ -14,7 +14,10 @@ module Mutations
 
         raise GraphQL::ExecutionError, 'Board not found' unless board.present?
 
-        board.destroy
+        if board.destroy
+          project = board.project
+          project.boards.where("position > ?", board.position).update_all("position = position - 1")
+        end
 
         { board: }
       end
