@@ -23,8 +23,6 @@ module Mutations
 
         raise GraphQL::ExecutionError, 'Task not found' unless task
 
-        raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].id == task.user_id
-
         # Change position for all tasks if it was changed
         if task.position != task_input[:position] && task_input[:position].present?
           if task.position > task_input[:position]
