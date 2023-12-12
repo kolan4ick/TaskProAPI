@@ -13,8 +13,8 @@ module Mutations
       def resolve(id:, **roster_input)
         raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
 
-        board = Board.find(roster_input[:board_id])
         roster = Roster.find(id)
+        board = roster.board
 
         raise GraphQL::ExecutionError, 'Roster not found' unless roster.present?
 
