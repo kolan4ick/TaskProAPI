@@ -8,8 +8,8 @@ module Types
     argument :deadline, GraphQL::Types::ISO8601DateTime, required: false
     argument :user_id, Integer, required: false
     argument :assignee_id, Integer, required: false
-    argument :priority_level, Integer, required: false
-    argument :status, Integer, required: false
+    argument :priority_level, TaskPriorityLevelType, required: false
+    argument :status, TaskStatusType, required: false
     argument :completed_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :position, Integer, required: false
     argument :roster_id, Integer, required: false
