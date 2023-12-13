@@ -23,9 +23,9 @@ module Mutations
 
         raise GraphQL::ExecutionError, 'Task not found' unless task
 
-        # Update roster if it was changed
+        # Add task to another roster if it was changed and change it position to the last
         if task.roster_id != task_input[:roster_id] && task_input[:roster_id].present?
-          raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.update(roster_id: task_input[:roster_id])
+          raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.update(roster_id: task_input[:roster_id], position: roster.tasks.maximum(:position) + 1)
         end
 
         # Change position for all tasks if it was changed
