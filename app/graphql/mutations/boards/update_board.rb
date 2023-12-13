@@ -8,7 +8,7 @@ module Mutations
       argument :id, ID, required: true
       argument :title, String, required: false
       argument :description, String, required: false
-      argument :cover_image, ApolloUploadServer::Upload, required: false
+      argument :cover_photo, ApolloUploadServer::Upload, required: false
       argument :position, Integer, required: false
 
       def resolve(**board_input)
@@ -17,16 +17,16 @@ module Mutations
         board = Board.find(board_input[:id])
         project = board.project
 
-        cover_image = board_input[:cover_image]
+        cover_photo = board_input[:cover_photo]
 
-        if cover_image.present?
-          cover_image_file = {
-            io: StringIO.new(cover_image.read),
-            filename: cover_image.original_filename,
-            content_type: cover_image.content_type
+        if cover_photo.present?
+          cover_photo_file = {
+            io: StringIO.new(cover_photo.read),
+            filename: cover_photo.original_filename,
+            content_type: cover_photo.content_type
           }
 
-          board_input[:cover_image] = cover_image_file
+          board_input[:cover_photo] = cover_photo_file
         end
 
         # Change position for all boards if it was changed
