@@ -47,5 +47,13 @@ module Types
 
       Board.find(id)
     end
+
+    field :users, [Types::UserType], null: false, description: "Returns a list of users"
+
+    def users
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      User.all
+    end
   end
 end
