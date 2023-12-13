@@ -25,7 +25,7 @@ module Mutations
 
         # Add task to another roster if it was changed and change it position to the last
         if task.roster_id != task_input[:roster_id] && task_input[:roster_id].present?
-          raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.update(roster_id: task_input[:roster_id], position: roster.tasks.maximum(:position) + 1)
+          raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.update(roster_id: task_input[:roster_id], position: roster.tasks.maximum(:position).to_i + 1)
         end
 
         # Change position for all tasks if it was changed
