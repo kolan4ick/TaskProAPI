@@ -5,7 +5,6 @@ class Task < ApplicationRecord
 
   enum status: { not_started: 0, in_progress: 1, completed: 2 }
 
-
   enum priority_level: { low: 0, medium: 1, high: 2 }
 
   def priority_level

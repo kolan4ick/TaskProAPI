@@ -8,8 +8,8 @@ module Types
     field :deadline, GraphQL::Types::ISO8601DateTime
     field :user_id, Integer, null: false
     field :assignee_id, Integer, null: false
-    field :priority_level, TaskPriorityLevelType, null: false
-    field :status, TaskStatusType, null: false
+    field :priority_level, String, null: false
+    field :status, String, null: false
     field :completed_at, GraphQL::Types::ISO8601DateTime
     field :comments, [Types::CommentType], null: true
     field :position, Integer, null: true

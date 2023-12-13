@@ -9,9 +9,9 @@ module Mutations
       argument :description, String, required: false
       argument :deadline, GraphQL::Types::ISO8601DateTime, required: false
       argument :assignee_id, Integer, required: true
-      argument :priority_level, Types::TaskPriorityLevelType, required: false
+      argument :priority_level, Types::TaskPriorityLevelType, required: true
       argument :roster_id, Integer, required: true
-      argument :status, Types::TaskStatusType, required: false
+      argument :status, Types::TaskStatusType, required: true
       argument :position, Integer, required: false
 
       def resolve(**task_input)
@@ -29,7 +29,7 @@ module Mutations
 
         # TODO: Create a notification for the assignee
 
-        { task: }
+        { task: task }
       end
     end
   end
