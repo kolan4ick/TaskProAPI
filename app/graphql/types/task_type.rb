@@ -8,6 +8,7 @@ module Types
     field :deadline, GraphQL::Types::ISO8601DateTime
     field :user_id, Integer, null: false
     field :assignee_id, Integer, null: false
+    field :assignee, Types::UserType, null: false
     field :priority_level, String, null: false
     field :status, String, null: false
     field :completed_at, GraphQL::Types::ISO8601DateTime
