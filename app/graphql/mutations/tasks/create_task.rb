@@ -27,9 +27,11 @@ module Mutations
 
         raise GraphQL::ExecutionError, task.errors.full_messages.join(', ') unless task.save
 
-        # TODO: Create a notification for the assignee
+        notification_content_uk = "Вам призначено нове завдання: #{task.title}"
+        notification_content_en = "You have been assigned a new task: #{task.title}"
+        user.notifications.build.create!(user_id: task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: task)
 
-        { task: task }
+        { task: }
       end
     end
   end

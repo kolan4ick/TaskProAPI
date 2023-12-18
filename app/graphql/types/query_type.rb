@@ -68,5 +68,15 @@ module Types
       # Get the first 3 tasks from each project
       tasks.group_by { | task | task.roster.board.project_id }.map { | _, tasks | tasks.first(3) }.flatten
     end
+
+    field :notifications, [Types::NotificationType], null: false, description: "Returns a list of notifications for the current user"
+
+    def notifications
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      current_user = context[:current_user]
+
+      current_user.notifications.order(read: :asc, created_at: :desc)
+    end
   end
 end

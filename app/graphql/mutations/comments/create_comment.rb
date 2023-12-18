@@ -17,7 +17,9 @@ module Mutations
 
         raise GraphQL::ExecutionError, comment.errors.full_messages.join(', ') unless comment.save
 
-        # TODO: Create a notification for the task owner and assignee
+        notification_content_uk = "Вам залишили коментар до завдання: #{comment.task.title}"
+        notification_content_en = "A comment has been left on your task: #{comment.task.title}"
+        user.notifications.build.create!(user_id: comment.task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: comment.task)
 
         { comment: }
       end
