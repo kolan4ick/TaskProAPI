@@ -55,5 +55,18 @@ module Types
 
       User.all
     end
+
+    field :recommend_tasks, [Types::TaskType], null: false, description: "Returns a list of tasks recommended for the current user"
+
+    def recommend_tasks
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      current_user = context[:current_user]
+
+      tasks = current_user.assigned_tasks.where.not(status: :completed).order(:deadline, :priority_level)
+
+      # Get the first 3 tasks from each project
+      tasks.group_by { | task | task.roster.board.project_id }.map { | _, tasks | tasks.first(3) }.flatten
+    end
   end
 end

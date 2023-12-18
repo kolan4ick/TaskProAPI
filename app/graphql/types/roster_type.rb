@@ -4,6 +4,7 @@ module Types
   class RosterType < Types::BaseObject
     field :id, ID, null: false
     field :board_id, Integer, null: false
+    field :board, Types::BoardType, null: false
     field :title, String
     field :tasks, [Types::TaskType], null: true
     field :position, Integer, null: false

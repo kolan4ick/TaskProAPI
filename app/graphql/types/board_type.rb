@@ -4,6 +4,7 @@ module Types
   class BoardType < Types::BaseObject
     field :id, ID, null: false
     field :project_id, Integer, null: false
+    field :project, Types::ProjectType, null: false
     field :title, String
     field :description, String
     field :rosters, [Types::RosterType], null: true
