@@ -45,7 +45,7 @@ module Mutations
         if task.assignee_id != task_input[:assignee_id] && task_input[:assignee_id].present?
           notification_content_uk = "Вам призначено нове завдання: #{task.title}"
           notification_content_en = "You have been assigned a new task: #{task.title}"
-          assignee.notifications.build.create!(user_id: task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: task)
+          assignee.notifications.build(user_id: task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: task).save
         end
 
         { task: }
