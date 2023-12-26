@@ -76,7 +76,14 @@ module Types
 
       current_user = context[:current_user]
 
-      current_user.notifications.order(read: :asc, created_at: :desc)
+      # Fetch all unread notifications
+      unread_notifications = current_user.notifications.where(read: false).order(created_at: :desc)
+
+      # Fetch last 10 read notifications
+      last_read_notifications = current_user.notifications.where(read: true).order(created_at: :desc).limit(10)
+
+      # Combine both sets into a single list
+      unread_notifications + last_read_notifications
     end
   end
 end
