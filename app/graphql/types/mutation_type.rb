@@ -31,5 +31,8 @@ module Types
     field :sign_up, mutation: Mutations::Users::SignUpUser
     field :sign_in, mutation: Mutations::Users::SignInUser
     field :check_user_token, mutation: Mutations::Users::CheckTokenUser
+
+    # Notifications
+    field :update_notification, mutation: Mutations::Notifications::UpdateNotification
   end
 end
