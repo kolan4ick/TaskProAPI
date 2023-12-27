@@ -6,7 +6,7 @@ class Notification < ApplicationRecord
   after_update :trigger_notifications_changed
 
   def trigger_notifications_changed
-    notifications = user.notifications
-    TaskProApiSchema.subscriptions.trigger("notifications_changed", {}, { notifications: })
+    notification_ids = user.notifications.pluck(:id)
+    TaskProApiSchema.subscriptions.trigger("notificationsChanged", {}, notification_ids)
   end
 end

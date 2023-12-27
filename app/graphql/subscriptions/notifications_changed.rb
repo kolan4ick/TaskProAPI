@@ -1,7 +1,7 @@
 module Subscriptions
-  class NotificationsChanged < BaseSubscription
+  class NotificationsChanged < GraphQL::Schema::Subscription
     description "Notifications changed"
 
-    field :notifications, [Types::NotificationType], null: false
+    field :notification_ids, [ID], null: false
   end
 end

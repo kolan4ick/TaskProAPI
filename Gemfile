@@ -15,6 +15,7 @@ gem "puma", "~> 5.0"
 gem "dotenv-rails"
 
 gem "graphql"
+gem 'redis'
 
 gem "devise"
 

@@ -1,40 +1,49 @@
 class GraphqlChannel < ApplicationCable::Channel
   def subscribed
+    Rails.logger.info "Client subscribed"
+
     # Store all GraphQL subscriptions the consumer is listening for on this channel
     @subscription_ids = []
   end
 
   def execute(data)
-    query = data["query"]
-    variables = ensure_hash(data["variables"])
-    operation_name = data["operationName"]
-    context = {
-      channel: self,
-      current_application_context: connection.current_application_context
-    }
+    begin
+      query = data["query"]
+      variables = ensure_hash(data["variables"])
+      operation_name = data["operationName"]
+      context = {
+        channel: self
+      }
 
-    result = Schema.execute({
-                              query: query,
-                              context: context,
-                              variables: variables,
-                              operation_name: operation_name,
-                            })
+      # Execute the GraphQL query
+      result = TaskProApiSchema.execute(
+        query: query,
+        context: context,
+        variables: variables,
+        operation_name: operation_name
+      )
 
-    payload = {
-      result: result.to_h,
-      more: result.subscription?,
-    }
+      payload = {
+        result: result.subscription? ? { data: nil } : result.to_h,
+      }
 
-    # Append the subscription id
-    @subscription_ids << result.context[:subscription_id] if result.context[:subscription_id]
+      # Track the subscription here so we can remove it
+      # on unsubscribe.
+      @subscription_ids << context[:subscription_id] if result.context[:subscription_id]
 
-    transmit(payload)
+      transmit(payload)
+
+    rescue Exception => e
+      Rails.logger.error "Error executing GraphQL subscription: #{e.message}"
+    end
   end
 
   def unsubscribed
+    Rails.logger.info "Client unsubscribed"
+
     # Delete all of the consumer's subscriptions from the GraphQL Schema
     @subscription_ids.each do | sid |
-      Schema.subscriptions.delete_subscription(sid)
+      TaskProApiSchema.subscriptions.delete_subscription(sid)
     end
   end
 
