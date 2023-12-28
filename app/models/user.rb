@@ -25,4 +25,9 @@ class User < ApplicationRecord
                  exp: 60.days.from_now.to_i
                }, secret_key)
   end
+
+  # Retrieve all user's tasks and assigned tasks
+  def all_related_tasks
+    tasks.merge(assigned_tasks).distinct
+  end
 end

@@ -85,5 +85,18 @@ module Types
       # Combine both sets into a single list
       unread_notifications + last_read_notifications
     end
+
+    field :last_boards, [Types::BoardType], null: false, description: "Returns a list of boards that the current user has activity in"
+
+    def last_boards
+      raise GraphQL::ExecutionError, 'Unauthorized' unless context[:current_user].present?
+
+      current_user = context[:current_user]
+
+      all_user_tasks = current_user.all_related_tasks
+
+      # Fetch last 10 boards that the user has activity in
+      all_user_tasks.map { | task | task.roster.board }.uniq.last(10)
+    end
   end
 end
