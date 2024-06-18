@@ -2,6 +2,8 @@ class GraphqlChannel < ApplicationCable::Channel
   def subscribed
     Rails.logger.info "Client subscribed"
 
+    stream_from "graphql_channel_#{current_user.id}"
+
     # Store all GraphQL subscriptions the consumer is listening for on this channel
     @subscription_ids = []
   end
@@ -12,7 +14,8 @@ class GraphqlChannel < ApplicationCable::Channel
       variables = ensure_hash(data["variables"])
       operation_name = data["operationName"]
       context = {
-        channel: self
+        channel: self,
+        current_user: current_user
       }
 
       # Execute the GraphQL query

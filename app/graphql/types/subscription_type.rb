@@ -4,6 +4,6 @@ module Types
   class SubscriptionType < Types::BaseObject
     description "The subscription root for the GraphQL schema"
 
-    field :notifications_changed, subscription: Subscriptions::NotificationsChanged
+    field :notification_added, subscription: Subscriptions::NotificationAdded
   end
 end

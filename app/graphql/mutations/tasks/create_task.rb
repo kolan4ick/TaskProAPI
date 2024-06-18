@@ -29,7 +29,7 @@ module Mutations
 
         notification_content_uk = "Вам призначено нове завдання: #{task.title}"
         notification_content_en = "You have been assigned a new task: #{task.title}"
-        user.notifications.build(user_id: task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: task).save
+        Notification.create!(user_id: task.assignee_id, content_uk: notification_content_uk, content_en: notification_content_en, task: task)
 
         { task: }
       end
