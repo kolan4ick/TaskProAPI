@@ -17,6 +17,13 @@ module ApplicationCable
         rescue JWT::DecodeError
           reject_unauthorized_connection
         end
+      elsif token = cookies[:token]
+        begin
+          decoded_token = JWT.decode(token, Rails.application.credentials.dig(Rails.env.to_sym, :secret_key_base), true, { algorithm: 'HS256' })
+          User.find(decoded_token[0]['id'])
+        rescue JWT::DecodeError
+          reject_unauthorized_connection
+        end
       else
         reject_unauthorized_connection
       end
